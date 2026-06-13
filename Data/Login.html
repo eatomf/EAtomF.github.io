@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        .nav {
+            width: 100%;
+            height: 70px;
+            background-color: rgba(255, 255, 255, 1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .topic a {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .center {
+            display: flex;
+            gap: 40px;
+        }
+
+        .center a {
+            font-size: 16px;
+            font-weight: 400;
+            color: #333;
+            transition: color 0.2s;
+        }
+
+        .right a {
+            font-size: 15px;
+            padding: 8px 22px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav">
+        <div class="topic">
+            <a href="/index.html">城市公共骑行</a>
+        </div>
+        <div class="center">
+            <a href="/index.html">主页</a>
+            <a href="/routes.html">路线</a>
+            <a href="/tips.html">骑行知识</a>
+            <a href="/about.html">关于我们</a>
+        </div>
+        <div class="right">
+            <a href="/Data/Login.html">登录</a>
+        </div>
+    </div>
+</body>
+
+</html>
