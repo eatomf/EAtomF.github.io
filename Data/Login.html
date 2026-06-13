@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登录</title>
+    <link rel="icon" href="/Images/Faviocn.png">
+    <title>Login</title>
     <style>
         * {
             margin: 0;
@@ -13,68 +13,84 @@
         }
 
         body {
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            height: 100vh;
+            background-image: url(/Images/background.png);
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login {
+            width: 340px;
+            padding: 40px 30px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(40px);
+            text-align: center;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 35px;
+            margin-bottom: 30px;
+        }
+
+        input {
+            width: 100%;
+            height: 45px;
+            margin-bottom: 15px;
+            padding: 0 15px;
+            border: none;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            background: transparent;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        #submit {
+            background: #fff;
+            color: #2d5a3d;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        #submit:hover {
+            background: #6fd494;
+            color: #fff;
         }
 
         a {
+            color: rgba(255,255,255,0.6);
+            font-size: 13px;
             text-decoration: none;
-            color: #000;
         }
 
-        .nav {
-            width: 100%;
-            height: 70px;
-            background-color: rgba(255, 255, 255, 1);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 40px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-
-        .topic a {
-            font-size: 22px;
-            font-weight: 700;
-        }
-
-        .center {
-            display: flex;
-            gap: 40px;
-        }
-
-        .center a {
-            font-size: 16px;
-            font-weight: 400;
-            color: #333;
-            transition: color 0.2s;
-        }
-
-        .right a {
-            font-size: 15px;
-            padding: 8px 22px;
+        a:hover {
+            color: #4ade80;
         }
     </style>
 </head>
-
 <body>
-    <div class="nav">
-        <div class="topic">
-            <a href="/index.html">城市公共骑行</a>
-        </div>
-        <div class="center">
-            <a href="/index.html">主页</a>
-            <a href="/routes.html">路线</a>
-            <a href="/tips.html">骑行知识</a>
-            <a href="/about.html">关于我们</a>
-        </div>
-        <div class="right">
-            <a href="/Data/Login.html">登录</a>
-        </div>
+    <div class="login">
+        <h1>Login</h1>
+        <form action="/index.html" method="get">
+            <input type="text" placeholder="邮箱 / 用户名" required>
+            <input type="password" placeholder="密码" required>
+            <input type="submit" id="submit" value="Login">
+        </form>
+        <br>
+        <a href="#">忘记密码？</a> · <a href="#">注册账号</a>
     </div>
 </body>
-
 </html>
