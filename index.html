@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/Images/Faviocn.png">
+    <link rel="icon" href="/Images/Favicon.png">
     <title>城市骑行</title>
     <style>
         * {
@@ -23,6 +23,7 @@
             color: #000;
         }
 
+        /* 导航栏 */
         .nav {
             width: 100%;
             height: 70px;
@@ -56,15 +57,19 @@
         }
 
         .right {
+            height: 35px;
             color: #000;
+            line-height: 35px;
             border: 2px solid rgba(0, 0, 0, 0.4);
             border-radius: 8px;
         }
 
         .right a {
-            font-size: 15px;
+            font-size: 18px;
             padding: 8px 22px;
         }
+
+        /* 欢迎界面 */
 
         .Weclome {
             margin: auto;
@@ -87,6 +92,66 @@
             color: #858383;
         }
 
+        /* 城市骑行 */
+        .advantage {
+            width: 100%;
+            height: 920px;
+            background-color: rgb(238, 236, 236);
+            padding: 5px;
+            margin: 0px auto;
+            text-align: center;
+            overflow:scroll;
+        }
+
+        .advantage h2 {
+            text-align: center;
+            font-size: 50px;
+            color: #6fd494;
+        }
+
+        .card {
+            display: inline-block;
+            width: 480px;
+            height: 780px;
+            margin-top: 40px;
+            margin-left: 30px;
+            background-color:#fff;
+            position: relative;
+        }
+
+        .card p {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px;
+        }
+
+        .routes {
+            width: 420px;
+            margin: 0px auto;
+            position: relative;
+        }
+
+        .routes img:nth-child(1) {
+            position: absolute;
+            transform: rotate(-6deg);
+            top: 30px;
+            left: 0px;
+        }
+
+        .routes img:nth-child(2) {
+            position: absolute;
+            top: 30px;
+            left: 70px;
+            transform: rotate(6deg);
+        }
+
+        .routes img {
+            position: relative;
+            cursor: pointer;
+        }
+
         .topic:hover {
             transform: scale(1.2);
             transition: all 1s;
@@ -105,7 +170,7 @@
 <body>
     <div class="nav">
         <div class="topic">
-            <a href="/index.html">城市公共骑行</a>
+            <a href="/index.html">城市骑行</a>
         </div>
         <div class="center">
             <a href="/index.html">主页</a>
@@ -123,8 +188,57 @@
             <p>探索城市的每一个角落，绿色出行，自在骑行。让每一次出发都成为发现美好的旅程，让每一条街道都留下你的车轮印记。</p>
         </div>
     </div>
-    <div class="routes">
+    <div class="advantage">
+        <h2>骑行路线</h2>
+        <div class="card">
+            <div class="box">
+                <img src="/Images/bj.jpg" alt="" width="480px">
+                <div class="routes">
+                    <img src="/Images/bjr1.jpg" alt="" width="400px">
+                    <img src="/Images/bjr2.jpg" alt="" width="350px">
+                </div>
+                <p>作为首都，北京的骑行氛围在全国都名列前茅。在北京，热门骑行点也非常多，诸如南海子、大运河，以及郊区的山里，众多长而缓的山路，加之风景更胜一筹，深得当地骑友喜爱。</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="box">
+                <img src="/Images/cd.jpg" alt="" width="480px">
+                <div class="routes">
+                    <img src="/Images/cdr1.jpg" alt="" width="320px">
+                    <img src="/Images/cdr2.jpg" alt="" width="350px">
+                </div>
+                <p>根据官方最新数据，2024年成都绿道里程将从7000公里级跨越至8000公里级（整体规划1.69万公里）。在庞大的绿道体系中，最知名，也最热闹的绿道当属绕城100公里天府绿道。</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="box">
+                <img src="/Images/hz.jpg" alt="" width="480px">
+                <div class="routes">
+                    <img src="/Images/hzr1.jpg" alt="" width="320px">
+                    <img src="/Images/hzr2.jpg" alt="" width="350px">
+                </div>
+                <p>湘湖整体管理没有西湖景区那般精细，宽松度更高，同时设施也很完善，并且游客流量相对适中，全程骑行体验更自由，也更静谧。</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="box">
+                <img src="/Images/gz.jpg" alt="" width="480px">
+                <div class="routes">
+                    <img src="/Images/gzr1.jpg" alt="" width="400px" style="transform: rotate(0deg);">
+                </div>
+                <p>南昆山路线由于被北回归线穿过，有着「北回归线上的绿洲」之名。这条线路聚焦爬坡，正反爬总距离约68公里，累计爬升约1400米，新手进阶后的必打卡路线之一。</p>
+            </div>
+        </div>
     </div>
+    <script>
+        const imgs = document.querySelectorAll('.routes img');
+        imgs.forEach(img => {
+            img.addEventListener('click', () => {
+                imgs.forEach(i => i.style.zIndex = 0);
+                img.style.zIndex = 10;
+            });
+        });
+    </script>
 </body>
 
 </html>
