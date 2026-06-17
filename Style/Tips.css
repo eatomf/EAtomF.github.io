@@ -348,3 +348,48 @@ border-radius: 20px;
 font-size: 12px;
 font-weight: 500;
 }
+@media (max-width: 800px) {
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .mission {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .contact {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .footer-top {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .nav {
+        padding: 0 20px;
+    }
+
+    .center {
+        display: none;
+    }
+
+    .hero {
+        padding: 56px 20px 48px;
+    }
+
+    .main {
+        padding: 40px 20px 60px;
+    }
+
+    .footer {
+        padding: 40px 20px 0;
+    }
+
+    .footer-top {
+        grid-template-columns: 1fr;
+    }
+}
