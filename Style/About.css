@@ -2,23 +2,24 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    transition: all 0.5s;
 }
 
 body {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background: #fff;
+    color: #1a1a1a;
 }
 
 a {
     text-decoration: none;
-    color: #000;
+    color: inherit;
 }
 
-/* 导航栏 */
+/* 导航 */
 .nav {
     width: 100%;
     height: 70px;
-    background-color: rgba(255, 255, 255, 1);
+    background: #fff;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -26,13 +27,18 @@ a {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
     z-index: 1000;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .topic a {
     font-size: 22px;
     font-weight: 700;
+    transition: transform 0.3s;
+}
+
+.topic:hover {
+    transform: scale(1.05);
 }
 
 .center {
@@ -42,179 +48,179 @@ a {
 
 .center a {
     font-size: 16px;
-    font-weight: 400;
     color: #333;
-    transition: color 0.2s;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.center a:hover {
+    color: #6fd494;
+    transform: scale(1.1);
+}
+
+.center a.active {
+    color: #6fd494;
+    font-weight: 700;
 }
 
 .right {
     height: 35px;
-    color: #000;
     line-height: 35px;
     border: 2px solid rgba(0, 0, 0, 0.4);
     border-radius: 8px;
+    transition: all 0.3s;
 }
 
 .right a {
     font-size: 18px;
     padding: 8px 22px;
-}
-
-/* 欢迎界面 */
-
-.Weclome {
-    margin: auto;
-    width: 100%;
-    font-size: 25px;
-    text-align: center;
-}
-
-.des {
-    display: flex;
-    width: 100%;
-    height: 400px;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.des p {
-    font-size: 18px;
-    padding: 10px;
-    color: #858383;
-}
-
-/* 城市骑行 */
-.advantage {
-    width: 100%;
-    height: 920px;
-    background-color: rgb(238, 236, 236);
-    padding: 5px;
-    margin: 0px auto;
-    text-align: center;
-    overflow: scroll;
-}
-
-.advantage h2 {
-    text-align: center;
-    font-size: 50px;
-    color: #6fd494;
-}
-
-.card {
-    display: inline-block;
-    width: 480px;
-    height: 780px;
-    margin-top: 40px;
-    margin-left: 30px;
-    background-color: #fff;
-    position: relative;
-}
-
-.card p {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 10px;
-    cursor: auto;
-}
-
-.routes {
-    width: 420px;
-    margin: 0px auto;
-    position: relative;
-}
-
-.routes img:nth-child(1) {
-    position: absolute;
-    transform: rotate(-6deg);
-    top: 30px;
-    left: 0px;
-}
-
-.routes img:nth-child(2) {
-    position: absolute;
-    top: 30px;
-    left: 70px;
-    transform: rotate(6deg);
-}
-
-.routes img {
-    position: relative;
-    cursor: pointer;
-}
-
-.center a:hover {
-    color: #6fd494;
-    transform: scale(1.2);
-}
-
-.topic:hover {
-    transform: scale(1.2);
-    transition: all 1s;
-}
-
-.right a:hover {
-    color: #fff;
+    transition: color 0.3s;
 }
 
 .right:hover {
-    background-color: #000;
+    background: #000;
 }
 
-/* warrne */
-.warning-banner {
-    width: 100%;
-    background: #6fd494;
-    border-top: 4px solid black;
-    border-bottom: 4px solid black;
-    margin: 20px 0px;
-    padding: 10px;
-    overflow: hidden;
-    position: relative;
-}
-
-.warning-banner-text {
-    display: inline-block;
+.right:hover a {
     color: #fff;
-    font-style: italic;
-    white-space: nowrap;
-    animation: marquee 15s linear infinite;
+}
+
+/* Hero */
+.hero {
+    margin-top: 70px;
+    padding: 90px 40px 80px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.hero-inner {
+    max-width: 680px;
+}
+
+.hero h1 {
+    font-size: 52px;
     font-weight: 700;
-    font-size: 30px;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin-bottom: 20px;
 }
 
-.warning-banner-text span {
-    margin-left: 40px;
+.hero h1 span {
+    color: #6fd494;
 }
 
-@keyframes marquee {
-    0% {
-        transform: translateX(0);
-    }
-
-    100% {
-        transform: translateX(-50%);
-    }
+.hero p {
+    font-size: 17px;
+    color: #888;
+    line-height: 1.8;
+    max-width: 520px;
 }
 
-.reverse {
-    animation: marquee-reverse 15s linear infinite;
+/* 主体 */
+.main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 64px 40px 80px;
 }
 
-@keyframes marquee-reverse {
-    0% {
-        transform: translateX(-50%);
-    }
+/* 使命 */
+.mission {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+    margin-bottom: 72px;
+    padding-bottom: 72px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
 
-    100% {
-        transform: translateX(0);
-    }
+.mission-text h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.mission-text p {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.9;
+}
+
+.stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.stat-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 22px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.stat-row:first-child {
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.stat-num {
+    font-size: 40px;
+    font-weight: 700;
+    color: #6fd494;
+    line-height: 1;
+    min-width: 80px;
+}
+
+.stat-label {
+    font-size: 15px;
+    color: #444;
+}
+
+.stat-sub {
+    font-size: 13px;
+    color: #aaa;
+    display: block;
+    margin-top: 3px;
+}
+
+/* 联系 */
+.contact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+}
+
+.contact h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.contact p {
+    font-size: 15px;
+    color: #888;
+}
+
+.btn-dark {
+    display: inline-block;
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 13px 28px;
+    border-radius: 10px;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+
+.btn-dark:hover {
+    background: #6fd494;
+    color: #1a1a1a;
 }
 
 /* Footer */
 .footer {
-    background-color: #000;
+    background: #000;
     color: #fff;
     padding: 60px 40px 0;
 }
@@ -238,7 +244,6 @@ a {
     color: #fff;
     display: block;
     margin-bottom: 14px;
-    text-decoration: none;
 }
 
 .footer-brand .brand-name span {
@@ -261,40 +266,17 @@ a {
     width: 30px;
 }
 
-.social-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255, 255, 255, 0.6);
-    text-decoration: none;
-    font-size: 16px;
-    transition: all 0.2s;
-}
-
-.social-btn:hover {
-    background: #6fd494;
-    color: #000;
-    border-color: #6fd494;
-}
-
 .footer-col h4 {
     font-size: 13px;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.4);
-    letter-spacing: 0.08em;
+    letter-spacing: .08em;
     text-transform: uppercase;
     margin-bottom: 18px;
 }
 
 .footer-col ul {
     list-style: none;
-    padding: 0;
-    margin: 0;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -303,7 +285,6 @@ a {
 .footer-col ul li a {
     font-size: 14px;
     color: rgba(255, 255, 255, 0.65);
-    text-decoration: none;
     transition: color 0.2s;
 }
 
@@ -334,7 +315,6 @@ a {
     justify-content: space-between;
     padding: 20px 0;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
-    margin-top: 0;
 }
 
 .footer-bottom p {
@@ -350,7 +330,6 @@ a {
 .footer-bottom-links a {
     font-size: 13px;
     color: rgba(255, 255, 255, 0.3);
-    text-decoration: none;
     transition: color 0.2s;
 }
 
