@@ -210,7 +210,7 @@ a {
     padding: 13px 28px;
     border-radius: 10px;
     white-space: nowrap;
-    transition: background 0.2s;
+    transition: all 0.2s;
 }
 
 .btn-dark:hover {
