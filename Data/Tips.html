@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/Images/Favicon.png">
+    <title>骑行知识 - 城市骑行</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.5s;
+        }
+
+        body {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        /* 导航栏 */
+        .nav {
+            width: 100%;
+            height: 70px;
+            background-color: rgba(255, 255, 255, 1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .topic a {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .center {
+            display: flex;
+            gap: 40px;
+        }
+
+        .center a {
+            font-size: 16px;
+            font-weight: 400;
+            color: #333;
+            transition: color 0.2s;
+        }
+
+        .right {
+            height: 35px;
+            color: #000;
+            line-height: 35px;
+            border: 2px solid rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+        }
+
+        .right a {
+            font-size: 18px;
+            padding: 8px 22px;
+        }
+
+        .right:hover {
+            background-color: #000;
+        }
+
+        .right:hover a {
+            color: #fff;
+        }
+
+        /* 页面标题 */
+        .page-hero {
+            margin-top: 70px;
+            background-color: #fff;
+            padding: 64px 40px 48px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .page-hero h1 {
+            font-size: 70px;
+            font-weight: bold;
+            letter-spacing: -1px;
+            margin-top: 12px;
+        }
+
+        .page-hero h1 span {
+            color: #6fd494;
+        }
+
+        .page-hero p {
+            font-size: 17px;
+            color: #777;
+            max-width: 530px;
+            line-height: 1.7;
+        }
+
+        /* 标签导航栏 */
+        .tab-nav {
+            background: #fff;
+            padding: 0 40px;
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 70px;
+            z-index: 100;
+        }
+
+        .tab-btn {
+            padding: 16px 24px;
+            font-size: 15px;
+            color: #888;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: #1a1a1a;
+            border-bottom-color: #6fd494;
+            font-weight: 700;
+        }
+
+        /* 主体布局 */
+        .content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 40px 80px;
+        }
+
+        /* 入门基础 */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-intro {
+            font-size: 15px;
+            color: #888;
+            margin-bottom: 32px;
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        /* 横幅提示 */
+        .tip-banner {
+            background: #6fd494;
+            border-radius: 16px;
+            padding: 32px 36px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .tip-banner .big-icon {
+            font-size: 48px;
+            flex-shrink: 0;
+        }
+
+        .tip-banner h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .tip-banner p {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* 卡片网格 */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .tip-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 28px;
+            border: 1px solid rgba(0, 0, 0, 0.07);
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .tip-card .icon {
+            width: 44px;
+            height: 44px;
+            background: #edfbf3;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 16px;
+        }
+
+        .tip-card h3 {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .tip-card p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.75;
+        }
+
+        .tip-card .tag {
+            display: inline-block;
+            margin-top: 14px;
+            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: #f0fdf6;
+            color: #3aaa6a;
+            font-weight: 500;
+        }
+
+        .icon img {
+            width: 35px;
+        }
+
+        /* 安全骑行 */
+        .rule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .rule-item {
+            background: #fff;
+            border-radius: 12px;
+            padding: 22px 28px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.07);
+            transition: transform 0.2s;
+        }
+
+        .rule-item:hover {
+            transform: translateX(4px);
+        }
+
+        .rule-num {
+            width: 36px;
+            height: 36px;
+            background: #6fd494;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .rule-content h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .rule-content p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* 选车指南 */
+        .bike-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.07);
+        }
+
+        .bike-table th {
+            background: #000;
+            color: #fff;
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .bike-table th:first-child {
+            border-radius: 14px 0 0 0;
+        }
+
+        .bike-table th:last-child {
+            border-radius: 0 14px 0 0;
+        }
+
+        .bike-table td {
+            padding: 14px 20px;
+            font-size: 14px;
+            color: #444;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .bike-table tr:hover td {
+            background: #6fd494;
+        }
+
+        .badge-easy {
+            background: #edfbf3;
+            color: #3aaa6a;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-mid {
+            background: #fffbea;
+            color: #c97d00;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-hard {
+            background: #fff0f0;
+            color: #d03030;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* 保养维护 */
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <div class="topic">
+            <a href="/index.html">城市骑行</a>
+        </div>
+        <div class="center">
+            <a href="/index.html">主页</a>
+            <a href="/index.html#ride">路线</a>
+            <a href="/Data/Tips.html">骑行知识</a>
+            <a href="/about.html">关于我们</a>
+        </div>
+        <div class="right">
+            <a href="/Data/Login.html">登录</a>
+        </div>
+    </div>
+    <div class="page-hero">
+        <h1>骑行<span>知识库</span></h1>
+        <p>从第一次上路到穿越山海，这里汇集了每个骑行阶段需要知道的一切。</p>
+    </div>
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab(this, 'basics')">入门基础</button>
+        <button class="tab-btn" onclick="switchTab(this, 'safety')">安全骑行</button>
+        <button class="tab-btn" onclick="switchTab(this, 'choose')">选车指南</button>
+        <button class="tab-btn" onclick="switchTab(this, 'maintain')">保养维护</button>
+    </div>
+    <div class="content">
+        <!-- 入门基础 -->
+        <div class="section active" id="basics">
+            <p class="section-intro">刚开始骑行？这些基础知识会帮助你更快上手，也让每一次出行更舒适。</p>
+
+            <div class="tip-banner">
+                <div class="big-icon"><img src="/Images/bulb.png" alt="bulb" width="75px"></div>
+                <div>
+                    <h3>骑行前最重要的一步</h3>
+                    <p>调好坐垫高度。当脚踏踩到最低点时，膝盖保持微弯（约 25–35° 弯曲），这能有效避免膝关节损伤，也能发挥最大踩踏效率。</p>
+                </div>
+            </div>
+            <div class="cards-grid">
+                <div class="tip-card">
+                    <div class="icon"><img src="/Images/riding-line.png" alt=""></div>
+                    <h3>骑行姿势</h3>
+                    <p>身体微微前倾，手肘自然弯曲不要锁死，背部保持放松弓形，不要弓腰驼背。视线看向前方 10–15 米，而不是盯着轮子。</p>
+                    <span class="tag">基础</span>
+                </div>
+                <div class="tip-card">
+                    <div class="icon"><img src="/Images/skill.png" alt=""></div>
+                    <h3>踩踏节奏（踏频）</h3>
+                    <p>初学者建议保持 60–80 rpm 的踏频，进阶后可以提升到 80–100 rpm。高踏频配合轻齿比，比低踏频踩重齿比更省膝盖。</p>
+                    <span class="tag">技巧</span>
+                </div>
+                <div class="tip-card">
+                    <div class="icon"><img src="/Images/setting.png" alt=""></div>
+                    <h3>变速使用</h3>
+                    <p>上坡前提前换小齿比，下坡时再换大齿比。不要在踩踏用力的情况下强行变速，这会加速链条和飞轮磨损。</p>
+                    <span class="tag">技巧</span>
+                </div>
+                <div class="tip-card">
+                    <div class="icon"><img src="/Images/drop.png" alt=""></div>
+                    <h3>补水与能量</h3>
+                    <p>每骑行 20–30 分钟补充 150–200ml 水。超过 60 分钟的骑行建议携带能量胶或香蕉。不要等到口渴了才喝水。</p>
+                    <span class="tag">体能</span>
+                </div>
+                <div class="tip-card">
+                    <div class="icon"><img src="/Images/thermometer.png" alt=""></div>
+                    <h3>热身与拉伸</h3>
+                    <p>出发前 5–10 分钟低强度热身，骑行后重点拉伸股四头肌、腘绳肌和小腿。这是避免膝痛和抽筋的关键习惯。</p>
+                    <span class="tag">体能</span>
+                </div>
+                <div class="tip-card">
+                    <div class="icon"><img src="/Images/wind.png" alt=""></div>
+                    <h3>应对逆风</h3>
+                    <p>遇到逆风降低踏频、换小齿比，身体尽量趴低减少风阻。有骑友同行时轮流领骑，跟在前车后方 0.5 米可省力 30% 以上。</p>
+                    <span class="tag">技巧</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 安全骑行 -->
+        <div class="section" id="safety">
+            <p class="section-intro">安全是骑行的前提。养成这些习惯，让每一次出行都能平安归来。</p>
+
+            <div class="rule-list">
+                <div class="rule-item">
+                    <div class="rule-num">1</div>
+                    <div class="rule-content">
+                        <h4>头盔是唯一不能妥协的装备</h4>
+                        <p>任何骑行，哪怕只是楼下转一圈，都必须佩戴头盔。摔倒时头部受到保护是头盔存在的唯一理由。选择符合 GB 24429 或 CE EN1078
+                            认证的产品，佩戴时确保帽沿距眉毛两指宽，下颌带收紧后只能塞入两根手指。</p>
+                    </div>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-num">2</div>
+                    <div class="rule-content">
+                        <h4>前后灯，天黑必开</h4>
+                        <p>夜间或光线不足时，前白灯（至少 200 流明）和后红尾灯缺一不可。尾灯建议选闪烁模式，能更有效引起机动车司机的注意。进山路段白天也建议开启尾灯。</p>
+                    </div>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-num">3</div>
+                    <div class="rule-content">
+                        <h4>上路前检查刹车</h4>
+                        <p>每次出发前捏一下前后刹车，确认刹车皮没有偏移、手感正常、线缆没有松弛。高速下坡前再次确认制动有效，刹车失灵是严重事故的常见原因之一。</p>
+                    </div>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-num">4</div>
+                    <div class="rule-content">
+                        <h4>占道要有预判，不强行超车</h4>
+                        <p>城市骑行靠右行驶，不骑入快车道。超越前方慢速车辆时，先确认后方来车，发出手势示意后再缓慢超越。避免突然并线和急刹，给周围车辆足够的反应时间。</p>
+                    </div>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-num">5</div>
+                    <div class="rule-content">
+                        <h4>山地骑行告知他人行程</h4>
+                        <p>进山骑行前务必告诉家人或朋友你的路线和预计返回时间。建议携带充满电的手机和备用电源，开启实时位置共享。不建议单人骑行人迹罕至的山路。</p>
+                    </div>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-num">6</div>
+                    <div class="rule-content">
+                        <h4>应急处理：爆胎不要慌</h4>
+                        <p>行进中爆胎时，双手稳定把手，轻踩刹车（不要急刹），控制车辆缓慢靠边停下。随身携带备用内胎、撬胎棒和便携气泵，学会自行换胎是每个骑行人的必备技能。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 选车指南 -->
+        <div class="section" id="choose">
+            <p class="section-intro">不同的骑行场景需要不同的单车，找到最适合你的那辆才是关键。</p>
+
+            <div style="overflow-x: auto; margin-bottom: 32px;">
+                <table class="bike-table">
+                    <thead>
+                        <tr>
+                            <th>车型</th>
+                            <th>适合场景</th>
+                            <th>速度</th>
+                            <th>舒适度</th>
+                            <th>入门难度</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>城市通勤车</strong></td>
+                            <td>日常上下班、短途代步</td>
+                            <td>★★☆☆☆</td>
+                            <td>★★★★☆</td>
+                            <td><span class="badge-easy">简单</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>公路车</strong></td>
+                            <td>长途骑行、城郊拉练、公路赛事</td>
+                            <td>★★★★★</td>
+                            <td>★★★☆☆</td>
+                            <td><span class="badge-mid">适中</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>山地车</strong></td>
+                            <td>越野山路、土路、林道</td>
+                            <td>★★★☆☆</td>
+                            <td>★★★★☆</td>
+                            <td><span class="badge-mid">适中</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>砾石车（Gravel）</strong></td>
+                            <td>混合路面、长途探险</td>
+                            <td>★★★★☆</td>
+                            <td>★★★★☆</td>
+                            <td><span class="badge-mid">适中</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>折叠车</strong></td>
+                            <td>地铁 + 骑行、收纳受限场景</td>
+                            <td>★★☆☆☆</td>
+                            <td>★★★☆☆</td>
+                            <td><span class="badge-easy">简单</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>电助力自行车</strong></td>
+                            <td>通勤、坡度较大地区、年长骑友</td>
+                            <td>★★★☆☆</td>
+                            <td>★★★★★</td>
+                            <td><span class="badge-easy">简单</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 指南卡片 -->
+            <div class="cards-grid">
+                <div class="tip-card">
+                    <div class="icon"><img src="/Images/triangle-ruler.png" alt=""></div>
+                    <h3>车架尺寸怎么选</h3>
+                    <p>参考身高 × 0.59 得出跨高（惯用腿内侧到地面距离），对照品牌尺码表选择。宁可选偏小的尺码——坐垫可以升高，但把手伸距过长会引起肩颈疼痛。</p>
+                    <span class="tag">选购</span>
+                </div>
+                <div class="tip-card">
+                    <div class="icon"><img src="/Images/shopping.png" alt=""></div>
+                    <h3>在哪里买车</h3>
+                    <p>线下实体车店能提供试骑和免费调试服务，适合新手。线上平台价格更透明，但需要自己组装调试或支付额外费用。避免在不明来源的平台购买，假货和事故车翻新屡见不鲜。</p>
+                    <span class="tag">选购</span>
+                </div>
+            </div>
+        </div>
+        <!-- 保养维护 -->
+        <div class="section" id="maintain">
+            <p class="section-intro">定期保养能延长爱车寿命，也能在关键时刻避免机械故障。</p>
+
+            <div class="tip-banner">
+                <div class="big-icon"><img src="/Images/wrench.png" alt="" width="75px"></div>
+                <div>
+                    <h3>最容易被忽视的保养：链条润滑</h3>
+                    <p>干燥环境每骑 200–300km 加一次链条油，雨天骑行后及时擦干并重新润滑。链条是最容易磨损也最影响骑行手感的零件之一。</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="tip-card">
+                    <div class="icon"><img src="/Images/zoom.png" alt=""></div>
+                    <h3>每次骑行前（5 分钟）</h3>
+                    <p>检查轮胎气压是否足够（公路车 6–8 bar，山地车 2–3 bar）；捏刹车确认制动有效；快速检查链条有无卡链；确认快拆轮轴已锁紧。</p>
+                    <span class="tag">日常</span>
+                </div>
+                <div class="tip-card">
+                    <div class="icon"><img src="/Images/bin.png" alt=""></div>
+                    <h3>每周清洁（30 分钟）</h3>
+                    <p>用软布擦拭车架灰尘，重点清洁链条、飞轮和牙盘上的油泥。干净再润滑比直接在脏链上加油效果好得多，能有效延长传动系统寿命。</p>
+                    <span class="tag">日常</span>
+                </div>
+                <div class="tip-card">
+                    <div class="icon"><img src="/Images/screw.png" alt=""></div>
+                    <h3>每月检查螺丝</h3>
+                    <p>用扭力扳手或普通内六角扳手逐一确认把手、坐垫、车灯等固定螺丝没有松动。振动会让螺丝缓慢变松，不定期紧固是预防事故的重要习惯。</p>
+                    <span class="tag">定期</span>
+                </div>
+                <div class="tip-card">
+                    <div class="icon"><img src="/Images/part.png" alt=""></div>
+                    <h3>每年必换零件</h3>
+                    <p>刹车皮（或碟刹片）磨损到警戒线前更换；链条拉伸超标后更换（可用链条检测器确认）；轮胎侧壁出现裂纹或胎面磨平须立即更换。</p>
+                    <span class="tag">定期</span>
+                </div>
+                <div class="tip-card">
+                    <div class="icon"><img src="/Images/umbrella.png" alt=""></div>
+                    <h3>雨后专项处理</h3>
+                    <p>雨天骑行后用干布擦拭全车，重点擦干轴承部位和链条；敞开放置 1–2 小时自然干燥；重新润滑链条。避免雨后直接收纳，防止金属部件生锈。</p>
+                    <span class="tag">进阶</span>
+                </div>
+                <div class="tip-card">
+                    <div class="icon"><img src="/Images/warehouse.png" alt=""></div>
+                    <h3>存放注意事项</h3>
+                    <p>避免长期停放在阳光直射或潮湿的环境。轮胎气压可放至正常值的 70%（长期不骑时）。最好悬挂存放或至少将轮胎离地，避免轮胎局部形变。</p>
+                    <span class="tag">进阶</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function switchTab(btn, id) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(id).classList.add('active');
+    }
+</script>
+</html>
